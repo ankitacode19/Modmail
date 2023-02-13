@@ -52,6 +52,7 @@ async def on_message(ctx):
       channel = bot.get_channel(db[str(ctx.uthor.id)])
       pass
     else:
+      try:
         print("New User {} ".format(ctx.author.name))
         overwrites = {
           guild.default_role: discord.PermissionOverwrite
