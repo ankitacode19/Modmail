@@ -45,39 +45,36 @@ async def on_message(ctx):
   guild = bot.get_guild(1074367139928088597)
 
   category = discord.utils.get(guild.categories, id = 1074707885331861504)
-  viewable_roles = discord.utils.get(guild.roles, name = "Mods")
+  viewable_roles = discord.utils.get(guild.roles, name = "Mod")
 #Bot gets dm
   if not ctx.guild:
-    if find_key(ctx.author.id) is True:
-      channel = bot.get_channel(db[str(ctx.uthor.id)])
+    if find_keys(ctx.author.id) is True:
+      channel = bot.get_channel(db[str(ctx.author.id)])
       pass
     else:
       try:
         print("New User {} ".format(ctx.author.name))
         overwrites = {
           guild.default_role: discord.PermissionOverwrite
-          (read_messages = False),
-          viewable_role: discord.PermissionOverwrite
+          (read_messages = False), 
+          viewable_roles: discord.PermissionOverwrite
           (read_messages = True)
         }
         new_channel = await guild.create_text_channel(f"\
-        {ctx.author.name}-modmail", overwrites = overwrites,
-        category = category)
+        {ctx.author.name}-modmail", overwrites = overwrites, category = category)
   
   
-        db[str(ctx.author.id)] = newchannel.id
-        db[str(newchannel.id)] = ctx.author.id
+        db[str(ctx.author.id)] = new_channel.id
+        db[str(new_channel.id)] = ctx.author.id
         channel = bot.get_channel(db[str(ctx.author.id)])
   
-        embed = discord.Embed(title = "New DM", color = Color.random(), 
-        timestamp = datetime.utcnow(), description = ctx.content)
+        embed = discord.Embed(title = "New DM", color = Color.random(), timestamp = datetime.utcnow(), description = ctx.content)
   
         embed.set_footer(icon_url=ctx.author.avatar_url, text='\
         Sent by {} • {}'.format(ctx.author.name,
         ctx.author.mention))
   
-        embed.set_author(name = ctx.author.name, icon_url =     
-        ctx.author.avatar_url)
+        embed.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
   
         await channel.send(embed = embed)
         await ctx.add_reaction(emoji = '✅')
